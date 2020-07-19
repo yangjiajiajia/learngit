@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			#mine{
+				margin: 50px auto;
+			}
+			.level{
+				text-align: center;
+				margin-bottom: 10px;
+			}
+			.level button{
+				padding: 5px 15px;
+				background: #02a4ad;
+				border:none;
+				color: white;
+				border-radius: 3px;
+				outline: none;
+				cursor: pointer;
+			}
+			.level button.active{
+				background: #00abff;
+			}
+			.info{
+				margin-top: 10px;
+				text-align: center;
+			}
+			table{
+				border-spacing: 1px;
+				background: #929196;
+				margin: 0 auto;
+			}
+			td{
+				padding: 0;
+				width:20px;
+				height:20px;
+				background: #ccc;
+				border: 2px solid;
+				border-color: #fff #a1a1a1 #a1a1a1 #fff;
+				text-align: center;
+				line-height: 20px;
+				font-weight: bold;
+			}
+			.mine{
+				background: #d9d9d9 url(demo/雷.jpg) no-repeat center;
+				background-size: cover;
+			}
+			.flag{
+				background: #ccc url(demo/旗.jpg) no-repeat center;
+				background-size: cover;
+			}
+			td.zero,td.one,td.two,td.three,td.four,td.five,td.six,td.seven,td.eight{border-color: #d9d9d9;background: #d9d9d9;}
+			td.one{color:#92308f;}
+			td.two{color:#0332fe;}
+			td.three{color:#019f02;}
+			td.four{color:#ff2600;}
+			td.five{color:#ff7f29;}
+			td.six{color:#ff3fff;}
+			td.seven{color:#3fffbf;}
+			td.eight{color:#22ee0f;}
+		</style>
+	</head>
+	<body>
+		<div id="mine"> 
+			<div class="level">
+				<button class="active">初级</button>
+				<button>中级</button>
+				<button>高级</button>
+				<button>重新开始</button>
+			</div>
+			<div class="gameBox"></div>
+			<div class="info">剩余雷数:<span class="mineNum"></span></div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		function Mine(tr,td,mineNum){
+			this.tr = tr;
+			this.td = td;
+			this.mineNum = mineNum;//雷数
+			
+			this.squares = [];//存储所有方块的信息
+			this.tds = [];//存单元格的DOM对象
+			this.surplusMine = mineNum;//剩余雷的数量
+			this.allRight = false;//右击标的小红旗是否全是雷,用来判断游戏是否成功
+			
+			this.parent = document.querySelector(`.gameBox`);
+		} 
+		
+		
+		Mine.prototype.createDom = function(){//创建表格
+			var This = this;
+			var table = document.createElement(`table`);
+			for(var i = 0;i < this.tr;i++){
+				var domTr = document.createElement(`tr`);
+				this.tds[i] = [];
+				for(var j = 0;j < this.td;j++){
+					var domTd = document.createElement(`td`);
+					
+					domTd.pos = [i,j];//把格子对应的行与列存到格子身上
+					domTd.onmousedown = function(){
+						This.play(event,this);//This指实例对象,this指点击事件的Td
+					}
+					this.tds[i][j] = domTd;
+					// if(this.squares[i][j].type==`mine`){
+					// 	domTd.className = `mine`;
+					// }
+					// if(this.squares[i][j].type==`number`){
+					// 	domTd.innerHTML = this.squares[i][j].value;
+					// }
+					
+					domTr.appendChild(domTd);
+				}
+				table.appendChild(domTr);
+			}
+			this.parent.innerHTML = '';//插入之前先清空上一次的内容
+			this.parent.appendChild(table);
+		};
+		
+		Mine.prototype.gameOver = function(clickTd){//游戏失败时
+			for(var i = 0;i < this.tr;i ++){
+				for(var j = 0;j < this.td;j++){
+					if(this.squares[i][j].type == 'mine'){//点到雷时显示所有的雷
+						this.tds[i][j].className = 'mine';
+					}
+					this.tds[i][j].onmousedown = null;//这时不能再点击别的方块
+					
+				}
+			}
+			if(clickTd){
+				clickTd.style.borderColor = '#f00';
+			}
+		}
+		
+		
+		Mine.prototype.play = function(ev,obj){
+			var This = this;
+			if(ev.which == 1 && obj.className != 'flag'){//点击的是左键,此时右击标注小红旗后不能再左击出现数字
+				var curSquare = this.squares[obj.pos[0]][obj.pos[1]];
+				var cl = ['zero','one','two','three','five','six','seven','eight'];
+				
+				if(curSquare.type == 'number'){//用户点到点是数字
+					obj.innerHTML = curSquare.value;
+					obj.className = cl[curSquare.value];
+					if(curSquare.value == 0){//如果点到的是0
+						
+						obj.innerHTML = '';//不显示数字
+						
+						function getAllZero(square){
+							var around = This.getAround(square);//找到周围n个格子
+							
+							for(var i = 0;i < around.length;i ++){
+								var x = around[i][0];
+								var y = around[i][1];
+								
+								This.tds[x][y].className = cl[This.squares[x][y].value];
+								
+								if(This.squares[x][y].value == 0){//如果以某个格子为中心找到的格子值为零,就需要接着调用函数,即递归
+									if(!This.tds[x][y].check){//给对应的td添加一个属性,决定这个格子有没有被找过
+										This.tds[x][y].check = true;
+										getAllZero(This.squares[x][y]);
+									}
+								}else{//从某个格子周围找到的格子值不为零,就显示它的值
+									This.tds[x][y].innerHTML = This.squares[x][y].value;
+								}
+							}
+						}
+						
+						getAllZero(curSquare);
+					}
+				}else{//点到是雷
+					this.gameOver(obj);
+				}
+			}
+			if(ev.which == 3){//表示用户点击的是右键
+				if(obj.className && obj.className != 'flag'){//点击的是数字无效
+					return;
+				}
+				obj.className = obj.className == 'flag'?'':'flag';//切换class,有flag再点击就会变成空,没有就加上
+				
+				if(this.squares[obj.pos[0]][obj.pos[1]].type == 'mine'){
+					this.allRight = true;//用户标的小红旗背后都是雷
+				}else{
+					this.allRight = false;//有一个不是雷就变成false
+				}
+				
+				if(obj.className == 'flag'){//剩余总雷数的显示
+					this.mineNumDom.innerHTML =-- this.surplusMine;
+				}else{
+					this.mineNumDom.innerHTML =++ this.surplusMine;
+				}
+				
+				if(this.surplusMine == 0){//剩余雷数为0时表示用户已经标完小红旗,这时要判断游戏是成功了还是结束
+					if(this.allRight){//用户完全标注正确
+						alert('游戏成功');
+					}else{
+						alert('游戏失败');
+						this.gameOver();
+					}
+				}
+			}
+		}
+		
+		//获取雷的位置
+		Mine.prototype.randomNum = function(){
+			var square = new Array(this.tr*this.td);//设置长度为宽乘以高的空数组
+			for(var i = 0;i < square.length;i++){
+				square[i] = i;
+			}
+			square.sort(function(){return 0.5 - Math.random()});//打乱顺序随机排序
+			return square.slice(0,this.mineNum);//根据传进来的雷的数量决定获取多少数
+		};
+		
+		
+		//找格子周围的八个方格,
+		Mine.prototype.getAround = function(square){
+			var x = square.x;
+			var y = square.y;
+			var result = [];//把找到的格子的坐标返回
+			
+			// x-1,y-1  x,y-1  x+1,y-1
+			// x-1,y    x,y    x+1,y
+			// x-1,y+1  x,y+1  x+1,y+1 
+			
+			for(var i = x-1;i <= x + 1;i ++){//通过坐标循环九宫格
+				for(var j = y-1;j <= y+1;j ++){
+					if(
+						i < 0 ||  //格子超出左边范围
+						j < 0 ||  //格子超出上边范围
+						i > this.td -1 ||  //右边
+						j > this.tr -1 ||  //下边
+						(i == x && j == y) ||  //等于自身
+						this.squares[j][i].type =='mine'  //周围的格子是雷
+					){
+						continue;
+					}
+					
+					result.push([j,i]);//以行与列的形式返回
+				}
+			}
+			
+			return result;
+		}
+		
+		//更新雷周围的数字
+		Mine.prototype.upDateNumber = function(){
+			for(var i = 0; i < this.tr; i ++){
+				for(var j = 0; j < this.td; j ++){
+					if(this.squares[i][j].type == 'number'){//只更新雷周围的数字
+						continue;
+					}
+					
+					var num = this.getAround(this.squares[i][j]);//获取到每一个雷周围的数字
+					for(var k = 0;k < num.length;k ++){
+						
+						this.squares[num[k][0]][num[k][1]].value += 1;
+					}
+				}
+			}
+		}
+		
+		Mine.prototype.init = function(){
+			var rn = this.randomNum();//雷在格子里的位置
+			
+			var n = 0;//找到格子对应的索引
+			for(var i = 0;i < this.tr;i++){
+				this.squares[i] = [];
+				for(var j = 0;j < this.td;j++){
+					n++;
+					if(rn.indexOf(n)!= -1){
+						this.squares[i][j] = {type:`mine`,x:j,y:i};
+					}else{
+						this.squares[i][j] = {type:`number`,x:j,y:i,value:0};
+					}
+				}
+				
+			}
+			this.upDateNumber();
+			this.createDom();
+			this.parent.oncontextmenu = function(){//取消右击菜单
+				return false;
+			}
+			//剩余雷数
+			this.mineNumDom = document.querySelector('.mineNum');
+			this.mineNumDom.innerHTML = this.surplusMine;
+		};
+		
+		var btns = document.querySelectorAll('.level button');
+		var mine = null;//用来存储生成的实例
+		var ln = 0;//用来存储当前选中的状态
+		var arr = [[9,9,10],[16,16,40],[28,28,99]];//不同难度的行数,列数,雷数
+		for(let i = 0;i < btns.length - 1;i ++){
+			btns[i].onclick =function(){
+				btns[ln].className = '';
+				this.className = 'active';
+				mine = new Mine(...arr[i]);//...扩展运算符去掉外层的中括号
+				mine.init();
+				ln = i;
+			}
+		}
+		btns[0].onclick();//初始化，用户未点击按钮时默认显示初级界面
+		btns[3].onclick = function(){
+			mine.init();
+		}
+	</script>
+</html>

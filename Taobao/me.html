@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=0" />
+		<title>我的淘宝</title>
+		<link rel="stylesheet" href="base.css">
+		<link rel="stylesheet" href="index.css">
+		<link rel="stylesheet" href="iconfont.css">
+		<style type="text/css">
+			.content{
+				width: 100%;
+				height: 160px;
+				background-image: linear-gradient(to right,#FF8D00,#FF5400);
+				padding: 20px;
+			}
+			.content-box{
+				display: flex;
+				align-items: flex-start;
+			}
+			.content-img{
+				display: inline-block;
+				width: 50px;
+				height: 50px;
+				border-radius: 50%;
+				background-color: white;
+			}
+			.content-name{
+				display: inline-block;
+				width: 150px;
+				height: 30px;
+				line-height: 30px;
+				font-size: 18px;
+				color: white;
+				margin-left: 20px;
+				
+			}
+			.set{
+				background-image: url("https://gw.alicdn.com/tfs/TB1dbweXwHqK1RjSZFgXXa7JXXa-57-54.png_48x48q90");
+				width: 21px;
+				height: 20px;
+				background-size: cover;
+				margin-left: 20px;
+			}
+			.contact{
+				background-image: url("https://gw.alicdn.com/tfs/TB1tcovekL0gK0jSZFxXXXWHVXa-54-54.png_48x48q90");
+				width: 21px;
+				height: 20px;
+				background-size: cover;
+				margin-left: 70px;
+			}
+			.content-item{
+				display: flex;
+				justify-content: space-around;
+				margin-top: 20px;
+			}
+			.content-item a{
+				display: flex;
+				flex-direction: column;
+				text-align: center;
+				color: white;
+			}
+			.order{
+				width: 95%;
+				margin: 10px auto;
+				background-color: #fff;
+				border-radius: 10px;
+			}
+			.order a{
+				display: block;
+				height: 40px;
+				line-height: 40px;
+				margin-left: 10px;
+				margin-right: 10px;
+			}
+			.order a h3{
+				display: inline-block;
+			}
+			.order a span{
+				float: right;
+			}
+			.order-item{
+				border-top: 1px solid #eeeee7;
+				display: flex;
+				justify-content: space-around;
+			}
+			.order-item a{
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+			.order-item a span:nth-child(1){
+				display: flex;
+				justify-content: space-around;
+				margin-top: 10px;
+				width: 40px;
+				height: 40px;
+				background-size: cover;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="content">
+			<div class="content-box">
+				<div class="content-img"></div>
+				<div class="content-name">-----</div>
+				<div class="contact"></div>
+				<div class="set"></div>
+			</div>
+			<div class="content-item">
+				<a href="#">
+					<span>199</span>
+					<span>收藏夹</span>
+				</a>
+				<a href="#">
+					<span>5</span>
+					<span>关注店铺</span>
+				</a>
+				<a href="#">
+					<span>200</span>
+					<span>足迹</span>
+				</a>
+				<a href="#">
+					<span>12</span>
+					<span>红包卡券</span>
+				</a>
+			</div>
+		</div>
+		<div class="order">
+			<a href="myorder.html">
+				<h3>我的订单</h3>
+				<span>查看全部订单></span>
+			</a>
+			<div class="order-item">
+				<a href="#">
+					<span style="background-image: url('https://gw.alicdn.com/tfs/TB135Ipp.H1gK0jSZSyXXXtlpXa-87-87.png_60x60q90');"></span>
+					<span>待付款</span>
+				</a>
+				<a href="#">
+					<span style="background-image: url('https://gw.alicdn.com/tfs/TB1DdAqp.Y1gK0jSZFMXXaWcVXa-87-87.png_60x60q90');"></span>
+					<span>待发货</span>
+				</a>
+				<a href="#">
+					<span style="background-image: url('https://gw.alicdn.com/tfs/TB1b3zgmMmTBuNjy1XbXXaMrVXa-87-87.png_60x60q90');"></span>
+					<span>待收货</span>
+				</a>
+				<a href="#">
+					<span style="background-image: url('https://gw.alicdn.com/tfs/TB1fOKqm_tYBeNjy1XdXXXXyVXa-87-87.png_60x60q90');"></span>
+					<span>评价</span>
+				</a>
+				<a href="#">
+					<span style="background-image: url('https://gw.alicdn.com/tfs/TB1fMzgmMmTBuNjy1XbXXaMrVXa-87-87.png_60x60q90');"></span>
+					<span>退款/售后</span>
+				</a>
+			</div>
+		</div>
+		<!-- 底部 -->
+		<footer class="footer">
+			<a href="index.html" class="footer_item">
+				<span class="icon iconfont">&#xe69b;</span>
+				<span class="footer_item_text">首页</span>
+			</a>
+			<a href="car.html" class="footer_item">
+				<span class="icon iconfont">&#xe63b;</span>
+				<span class="footer_item_text">购物车</span>
+			</a>
+			<a href="myorder.html" class="footer_item">
+				<span class="icon iconfont">&#xe63a;</span>
+				<span class="footer_item_text">订单列表</span>
+			</a>
+			<a href="me.html" class="footer_item footer_item_active">
+				<span class="icon iconfont">&#xe64d;</span>
+				<span class="footer_item_text">我的淘宝</span>
+			</a>
+			<a href="more.html" class="footer_item">
+				<span class="icon iconfont">&#xe6a8;</span>
+				<span class="footer_item_text">更多</span>
+			</a>
+		</footer>
+	</body>
+</html>

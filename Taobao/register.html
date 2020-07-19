@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<title>注册</title>
+		<link rel="stylesheet" href="base.css">
+		<link rel="stylesheet" href="register.css">
+		<script src="ajax.js"></script>
+		<script type="text/javascript">
+			window.onload = function(){
+				var oBtn = document.getElementById('btn1');
+				var oAlert = document.getElementById('reg');
+				var aInputs = document.getElementsByTagName('input');
+				oBtn.onclick = function(){
+					$ajax({
+						method:"post",
+						url:"register.php",
+						data:{
+							username:aInputs[0].value,
+							password:aInputs[1].value,
+							addTime:new Date().getTime()
+						},
+						success:function(result){
+							var obj = JSON.parse(result);
+							if(obj.code){
+								oAlert.className = 'danger';
+							}else{
+								oAlert.className = 'success';
+								setTimeout(function(){
+									location.href = "login.html";
+								},2000);
+							}
+							oAlert.style.display = 'block';
+							oAlert.innerHTML = obj.message;
+						},
+						error:function(msg){
+							alert(msg);
+						}
+					})
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div class="content">
+			<p class="one">手机号注册</p>
+			<p class="two">亲，欢迎注册淘宝账号</p>
+			<input type="text" name="username" class="username" placeholder="手机号/邮箱/会员名"/><br/>
+			<input type="password" name="password" class="password" placeholder="请输入登录密码"/><br/>
+			<a href="register.html">马上登录</a><br/>
+			<div id="reg"></div>
+			<button id="btn1">注册</button>
+		</div>
+	</body>
+</html>

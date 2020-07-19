@@ -1,0 +1,34 @@
+/* 公用样式 */
+
+*,
+::before,
+::after{
+	/* 选中所有的元素和伪元素 */
+	margin: 0;
+	padding: 0;
+	/* 针对移动端的 */
+	box-sizing: border-box;/*针对所有的元素和伪元素都从边框计算宽度，防止宽度溢出出现滚动条*/
+	-webkit-box-sizing: border-box;/*主流移动端浏览器兼容*/
+	-webkit-tap-highlight-color: transparent;/*点击高亮效果清除*/
+}
+body{
+	font-size: 14px;
+	color: #333;
+	font-family: "microsoft yahei",sans-serif;
+}
+ul,ol{
+	list-style: none;
+}
+a{
+	text-decoration: none;
+	color: #333;
+}
+/* input,textarea{
+	选中的时候的样式
+	outline: none;
+	border: none;
+	禁止拖动textarea改变大小
+	resize: none;
+	清除移动端输入框特有的样式
+	-webkit-appearance: none;
+} */

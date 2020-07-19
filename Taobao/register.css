@@ -1,0 +1,48 @@
+.content{
+	margin: 40px auto;
+}
+.one{
+	font-size: 28px;
+	margin-left: 20px;
+}
+.two{
+	color: #aeafa7;
+	margin-top: 15px;
+	margin-left: 20px;
+}
+input{
+	border:none;
+	width: 90%;
+	border-bottom: 1px solid #FF4E22;
+	margin: 40px 0 10px 15px;
+	text-indent: 2em;
+	height: 30px;
+	line-height: 30px;
+}
+a{
+	float: right;
+	margin-right: 25px;
+	margin-top: 15px;
+}
+#btn1{
+	margin-top: 10px;
+	width: 90%;
+	height: 40px;
+	margin-left: 20px;
+	border-radius: 20px;
+	border: none;
+	background-image: linear-gradient(to right,#ff9d25,#ff531a);
+	color: white;
+}
+#reg{
+	width: 80%;
+	height: 30px;
+	margin: 40px auto;
+	display: none;
+}
+.success{
+	background-color: #63A35C;
+}
+.danger{
+	background-color: #ff7053;
+}
